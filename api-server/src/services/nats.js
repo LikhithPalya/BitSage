@@ -1,4 +1,4 @@
-    const { connect } = require('nats');
+const { connect } = require('nats');
 
 class NATSClient {
     constructor() {

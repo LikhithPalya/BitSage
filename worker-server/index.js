@@ -12,7 +12,7 @@ nats.connect().then(() => {
     console.log('Connected to NATS from worker ✅');
 
     // Schedule job every 1 minute (for testing)
-    schedule.scheduleJob('*/1 * * * *', () => {
+    schedule.scheduleJob('*/15 * * * *', () => {
         console.log('Publishing event at', new Date().toISOString());
 
         nats.publish('crypto.updates', { 
