@@ -10,6 +10,7 @@ class NATSClient {
         this.connection = await connect({
             servers: process.env.NATS_URL
         });
+        
         console.log('Connected to NATS ✅');
         return this.connection;
         } catch (err) {

@@ -1,3 +1,5 @@
 .env
 node_modules/
 NATS helper fn.md
+package-lock.json
+*.env

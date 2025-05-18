@@ -5,6 +5,7 @@ exports.calculateDeviation = async (req, res) => {
   try {
     const { coin } = req.query;
     
+    
     // Validate input
     if (!['bitcoin', 'ethereum', 'matic-network'].includes(coin)) {
       return res.status(400).json({ error: 'Invalid coin' });
