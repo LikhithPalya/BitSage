@@ -21,7 +21,7 @@ This project is a **Node.js backend system** that:
 - Initial implementation created new documents on every fetch → DB bloating  
 - 100 API calls = 300 duplicate documents (3 coins × 100 entries)  
 
-**Solutions Implemented**:  
+**Possible solutions to be Implemented**:  
 ```javascript
 // 1. Upsert Mechanism (Update existing records)
 await CryptoStat.updateOne(
