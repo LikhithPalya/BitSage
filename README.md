@@ -125,7 +125,5 @@ This project deepened my understanding of:
 - **Database optimization** for time-series data  
 - **Robust error handling** in Node.js  
 
-I’d love to bring this hands-on experience with backend systems to **KoinX** as an intern! Working on real-world crypto data pipelines has been incredibly rewarding, and I’m excited to contribute to your engineering team.  
 
-**Thank you** for this learning opportunity!  
   
