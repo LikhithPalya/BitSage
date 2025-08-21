@@ -63,14 +63,14 @@ const start = async () => {
             });
         });
 
-    // Error Handling Middleware
-    app.use((err, req, res, next) => {
-        console.error(err.stack);
-        res.status(500).json({ error: 'Internal Server Error' });
-    });
+        // Error Handling Middleware
+        app.use((err, req, res, next) => {
+            console.error(err.stack);
+            res.status(500).json({ error: 'Internal Server Error' });
+        });
 
-    app.listen(PORT, () => {
-        console.log(`API server running on port ${PORT}`);
+        app.listen(PORT, () => {
+            console.log(`API server running on port ${PORT}`);
     });
     } catch (err) {
         console.error('Server startup failed:', err);
