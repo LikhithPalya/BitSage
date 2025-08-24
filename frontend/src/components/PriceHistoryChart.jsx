@@ -17,6 +17,7 @@ export default function PriceHistoryChart({ coin }) {
         setHistory(res.data || []);
       } catch (err) {
         console.error('Failed to fetch history', err);
+        setHistory([]);
       }
     }
     load();

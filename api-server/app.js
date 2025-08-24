@@ -5,12 +5,18 @@ const nats = require('./src/services/nats');
 const { storeCryptoStats } = require('./src/controllers/cryptoController');
 const cryptoRoutes = require('./src/routes/cryptoRoutes');
 const statsRoutes = require('./src/routes/statsRoutes');
-
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
+// allow frontend to access backend
+app.use(cors({
+  origin: "http://localhost:5173",  // your React app
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 
 // Database Connection
 const connectDB = async () => {

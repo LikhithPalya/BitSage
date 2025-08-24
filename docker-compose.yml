@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  api-server:
+    build: ./api-server
+    container_name: api-server
+    ports:
+      - "3000:3000"   # host:container
+    env_file:
+      - ./api-server/.env
+    depends_on:
+      - worker-server
+
+  worker-server:
+    build: ./worker-server
+    container_name: worker-server
+    # Optional: expose only if you want to access it directly
+    ports:
+      - "3002:3000"   # host:container
+    env_file:
+      - ./worker-server/.env
+  
+  nats-server:
+    image: nats:latest
+    container_name: nats-server
+    ports:
+      - "4222:4222"
+
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "5173:5173"   # host:container
+    depends_on:
+      - api-server

@@ -11,8 +11,8 @@ process.on('unhandledRejection', (err) => {
 nats.connect().then(() => {
     console.log('Connected to NATS from worker ✅');
 
-    // Schedule job every 1 minute (for testing)
-    schedule.scheduleJob('*/15 * * * *', () => {
+    // Schedule job every 5 minute (for testing)
+    schedule.scheduleJob('*/5 * * * *', () => {
         console.log('Publishing event at', new Date().toISOString());
 
         nats.publish('crypto.updates', { 

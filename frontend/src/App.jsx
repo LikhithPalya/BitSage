@@ -1,102 +1,44 @@
-import React, { useEffect, useState } from "react";
-import { Line, Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  LineElement,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Title,
-  Tooltip,
-  Legend,
-  PointElement,
-} from "chart.js";
-
-ChartJS.register(
-  LineElement,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Title,
-  Tooltip,
-  Legend,
-  PointElement
-);
+import React, { useEffect, useState } from 'react';
+import PriceHistoryChart from './components/PriceHistoryChart';
+import PriceDeviationChart from './components/PriceDeviationChart';
 
 export default function App() {
-  const [stats, setStats] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [deviation, setDeviation] = useState([]);
-
+  const [coins] = useState(["bitcoin", "ethereum", "matic-network"]);
+  const [selectedCoin, setSelectedCoin] = useState("bitcoin");
+  const [_data, setData] = useState(null);
   useEffect(() => {
-    fetch("http://localhost:3000/stats")
-      .then((res) => res.json())
-      .then(setStats);
-
-    fetch("http://localhost:3000/history")
-      .then((res) => res.json())
-      .then(setHistory);
-
-    fetch("http://localhost:3000/deviation")
-      .then((res) => res.json())
-      .then(setDeviation);
-  }, []);
-
-  const historyData = {
-    labels: history.map((h) =>
-      new Date(h.timestamp).toLocaleTimeString()
-    ),
-    datasets: [
-      {
-        label: "Price",
-        data: history.map((h) => h.price),
-        borderColor: "rgb(75, 192, 192)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        fill: true,
-        tension: 0.2,
-      },
-    ],
-  };
-
-  const deviationData = {
-    labels: deviation.map((d) => d.coinId),
-    datasets: [
-      {
-        label: "Deviation (%)",
-        data: deviation.map((d) => d.deviation),
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-    ],
-  };
+    async function fetchData() {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE || 'http://localhost:3000'}/api/history?coin=${selectedCoin}&limit=30`);
+        if (!res.ok) throw new Error("Network response was not ok");
+        const json = await res.json();
+        setData(json);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setData(null);
+      }
+    }
+    fetchData();
+  }, [selectedCoin]);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Crypto Dashboard</h1>
+    <div style={{ textAlign: 'center', marginTop: 40 }}>
+      <h1 style={{ marginBottom: 20 }}>Crypto Dashboard</h1>
+      
+      {/* Coin Selector */}
+      <select value={selectedCoin} onChange={(e) => setSelectedCoin(e.target.value)} style={{ padding: 8, fontSize: 16, marginBottom: 20 }}>
+        {coins.map(c => <option key={c} value={c}>{c}</option>)}
+      </select>
 
-      <h2>Latest Stats</h2>
-      <div style={{ display: "flex", gap: "20px" }}>
-        {stats.map((coin) => (
-          <div
-            key={coin.coinId}
-            style={{
-              padding: "10px",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-            }}
-          >
-            <h3>{coin.coinId}</h3>
-            <p>Price: ${coin.price}</p>
-            <p>Market Cap: ${coin.marketCap}</p>
-            <p>24h Change: {coin.priceChange24h}%</p>
-          </div>
-        ))}
+      {/* Charts */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 40, flexWrap: 'wrap' }}>
+        <div style={{ width: 500 }}>
+          <PriceHistoryChart coin={selectedCoin} />
+        </div>
+        <div style={{ width: 500 }}>
+          <PriceDeviationChart coin={selectedCoin} />
+        </div>
       </div>
-
-      <h2>Price History</h2>
-      <Line data={historyData} />
-
-      <h2>Price Deviation</h2>
-      <Bar data={deviationData} />
     </div>
   );
 }
